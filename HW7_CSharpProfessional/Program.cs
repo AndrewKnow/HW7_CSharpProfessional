@@ -37,10 +37,6 @@ namespace HW7_CSharpProfessional
 
 
             // пп. 2 - 3
-
-
-
-
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Написать функцию, принимающую в качестве аргумента путь к папке. " +
                 "Из этой папки параллельно прочитать все файлы и вычислить количество пробелов в них.");
