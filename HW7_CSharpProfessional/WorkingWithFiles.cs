@@ -46,12 +46,12 @@ namespace HW7_CSharpProfessional
         /// Создание заданного кол-ва файлов в папке с рандомным кол-вом пробелов
         /// </summary>
         /// <param name="path"></param>
-        public static void CreateFilesWithRandomWhitespaces(string path)
+        public static void CreateFilesWithRandomWhitespaces(string path, int CountOfFiles)
         {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < CountOfFiles; i++)
             {
                 FileStream fs = File.Create(path + "\\" + "filename" + i + ".txt");
-                StreamWriter writer = new StreamWriter(fs);
+                StreamWriter writer = new(fs);
                 Random randomWhitespace = new Random();
                 var countWhitespace = randomWhitespace.Next(1, 1000);
 
@@ -59,7 +59,6 @@ namespace HW7_CSharpProfessional
 
                 writer.Write(whiteSpace(countWhitespace));
                 writer.Close();
-              
             }
         }
     }
