@@ -54,6 +54,9 @@ namespace HW7_CSharpProfessional
             WorkingWithFiles.CreateFilesWithRandomWhitespaces(path);
 
             // паралелльное чтение файлов
+            var sw1 = new Stopwatch();
+
+            sw1.Start();
             List<Task> tasks = new List<Task>();    
             foreach (FileInfo file in di.GetFiles())
             {
@@ -61,13 +64,9 @@ namespace HW7_CSharpProfessional
                 //Task taskFile = Task.Run(() => WorkingWithFiles.CountSpacesInFile(file.FullName));
                 tasks.Add(taskFile);
             }
-
-            var sw1 = new Stopwatch();
-
-            sw1.Start();
             Task.WaitAll(tasks.ToArray());
             sw1.Stop();
-            
+          
             // последовательное чтение файлов
             var sw2 = new Stopwatch();
             sw2.Start();
