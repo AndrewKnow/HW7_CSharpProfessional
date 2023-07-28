@@ -9,11 +9,15 @@ using System.Threading.Tasks;
 namespace HW7_CSharpProfessional
 {
     /// <summary>
-    /// Прочитать 3 файла параллельно и вычислить количество пробелов в них (через Task)
+    /// Работа с файлами
     /// </summary>
-    public static class WorkingWithFiles
+    public class WorkingWithFiles
     {
-
+        /// <summary>
+        /// Подсчёт пробелов
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static int CountSpacesInFile(string s)
         {
             var file1Text = File.ReadAllText(s);
@@ -21,9 +25,14 @@ namespace HW7_CSharpProfessional
             return spaceCount;
         }
 
+        /// <summary>
+        /// Создание файлов для пп.1
+        /// </summary>
+        /// <param name="file1"></param>
+        /// <param name="file2"></param>
+        /// <param name="file3"></param>
         public static void CreateFiles(string file1, string file2, string file3)
         {
-
             var file1Content = "hello world";
             var file2Content = "hello great world";
             var file3Content = "hello funny great world";
@@ -33,21 +42,24 @@ namespace HW7_CSharpProfessional
             File.WriteAllText(file3, file3Content);
         }
 
+        /// <summary>
+        /// Создание заданного кол-ва файлов в папке с рандомным кол-вом пробелов
+        /// </summary>
+        /// <param name="path"></param>
         public static void CreateFilesWithRandomWhitespaces(string path)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 FileStream fs = File.Create(path + "\\" + "filename" + i + ".txt");
                 StreamWriter writer = new StreamWriter(fs);
                 Random randomWhitespace = new Random();
-                var countWhitespace = randomWhitespace.Next(1, 100);
+                var countWhitespace = randomWhitespace.Next(1, 1000);
 
                 Func<int, string> whiteSpace = x => new string(' ', x);
 
                 writer.Write(whiteSpace(countWhitespace));
                 writer.Close();
-
-                Console.WriteLine($"File {"filename" + i + ".txt"} contains {CountSpacesInFile(path + "\\" + "filename" + i + ".txt")} spaces");
+              
             }
         }
     }

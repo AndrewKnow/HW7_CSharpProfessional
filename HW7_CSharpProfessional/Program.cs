@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using static System.Net.WebRequestMethods;
 
 namespace HW7_CSharpProfessional
@@ -7,8 +8,11 @@ namespace HW7_CSharpProfessional
     {
         static void Main(string[] args)
         {
-
+            // пп. 1
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Прочитать 3 файла параллельно и вычислить количество пробелов в них (через Task):");
+            Console.ForegroundColor = ConsoleColor.White;
+
             var (file1, file2, file3) = ("file1.txt", "file2.txt", "file3.txt");
 
             WorkingWithFiles.CreateFiles(file1, file2, file3);
@@ -28,28 +32,58 @@ namespace HW7_CSharpProfessional
 
             Task.WaitAll(task1, task2, task3);
 
-
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Написать функцию, принимающую в качестве аргумента путь к папке. " +
                 "Из этой папки параллельно прочитать все файлы и вычислить количество пробелов в них.");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            string path = Directory.GetCurrentDirectory() + @"\Папка";
+            DirectoryInfo di = new DirectoryInfo(path);
             try
             {
-                Directory.CreateDirectory("Папка");
+                di.Delete(true);
             }
             catch
             {
-
-                Console.WriteLine("Папка создана ранее");
+                Console.WriteLine("Ошибка удаления папки и файлов");
             }
-            
 
-            string path = Directory.GetCurrentDirectory() + @"\Папка";
+            Directory.CreateDirectory("Папка");
 
+            // пп. 2 - 3
             WorkingWithFiles.CreateFilesWithRandomWhitespaces(path);
 
+            // паралелльное чтение файлов
+            List<Task> tasks = new List<Task>();    
+            foreach (FileInfo file in di.GetFiles())
+            {
+                Task taskFile = Task.Run(() => Console.WriteLine($"Task: {file.Name} {WorkingWithFiles.CountSpacesInFile(file.FullName)} spaces"));
+                //Task taskFile = Task.Run(() => WorkingWithFiles.CountSpacesInFile(file.FullName));
+                tasks.Add(taskFile);
+            }
 
+            var sw1 = new Stopwatch();
 
+            sw1.Start();
+            Task.WaitAll(tasks.ToArray());
+            sw1.Stop();
+            
+            // последовательное чтение файлов
+            var sw2 = new Stopwatch();
+            sw2.Start();
+            foreach (FileInfo file in di.GetFiles())
+            {
+                Console.WriteLine($"Цикл: {file.Name} {WorkingWithFiles.CountSpacesInFile(file.FullName)} spaces");
+                //WorkingWithFiles.CountSpacesInFile(file.FullName);
+            }
+            sw2.Stop();
 
-            //Console.ReadKey();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Итоги:");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.WriteLine($"Время обработки из Task {sw1.ElapsedMilliseconds} мс");
+            Console.WriteLine($"Время обработки последовательно {sw2.ElapsedMilliseconds} мс");
 
             Console.WriteLine("Finished");
         }
