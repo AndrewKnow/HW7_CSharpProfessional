@@ -35,7 +35,6 @@ namespace HW7_CSharpProfessional
 
             Task.WaitAll(task1, task2, task3);
 
-
             // пп. 2 - 3
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Написать функцию, принимающую в качестве аргумента путь к папке. " +
