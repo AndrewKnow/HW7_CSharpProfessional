@@ -54,6 +54,7 @@ namespace HW7_CSharpProfessional
                 }
             });
 
+            // удаление директории (если создана ранее)
             string path = Directory.GetCurrentDirectory() + @"\Папка";
             DirectoryInfo di = new DirectoryInfo(path);
             try
@@ -65,24 +66,13 @@ namespace HW7_CSharpProfessional
                 Console.WriteLine("Ошибка удаления папки и файлов");
             }
 
+            // создание папки и файлов
             Directory.CreateDirectory("Папка");
-
-
             WorkingWithFiles.CreateFilesWithRandomWhitespaces(path, CountOfFiles);
 
             // паралелльное чтение файлов
-            var sw1 = new Stopwatch();
-
-            sw1.Start();
-            List<Task> tasks = new List<Task>();    
-            foreach (FileInfo file in di.GetFiles())
-            {
-                //Task taskFile = Task.Run(() => Console.WriteLine($"Task: {file.Name} {WorkingWithFiles.CountSpacesInFile(file.FullName)} spaces"));
-                Task taskFile = Task.Run(() => WorkingWithFiles.CountSpacesInFile(file.FullName));
-                tasks.Add(taskFile);
-            }
-            Task.WaitAll(tasks.ToArray());
-            sw1.Stop();
+            long sw = 0;
+            sw = ParallelFileReader.ReadFiles(Directory.GetFiles(path, "*.txt").ToList());
           
             // последовательное чтение файлов
             var sw2 = new Stopwatch();
@@ -99,7 +89,7 @@ namespace HW7_CSharpProfessional
             Console.WriteLine("Итоги:");
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine($"Время обработки из Task {sw1.ElapsedMilliseconds} мс");
+            Console.WriteLine($"Время обработки параллельно {sw} мс");
             Console.WriteLine($"Время обработки последовательно {sw2.ElapsedMilliseconds} мс");
         }
 
