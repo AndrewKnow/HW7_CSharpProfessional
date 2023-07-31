@@ -9,8 +9,9 @@ namespace HW7_CSharpProfessional
 {
     public class ParallelFileReader
     {
-        public static long ReadFiles(List<string> fileList)
+        public static long ReadFiles(string path)
         {
+            List<string> fileList = Directory.GetFiles(path, "*.txt").ToList();
             var sw = new Stopwatch();
             sw.Start();
             Parallel.ForEach(fileList, file =>

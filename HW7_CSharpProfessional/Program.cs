@@ -72,7 +72,7 @@ namespace HW7_CSharpProfessional
 
             // паралелльное чтение файлов
             long sw = 0;
-            sw = ParallelFileReader.ReadFiles(Directory.GetFiles(path, "*.txt").ToList());
+            sw = ParallelFileReader.ReadFiles(path);
           
             // последовательное чтение файлов
             var sw2 = new Stopwatch();
